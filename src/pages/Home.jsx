@@ -1,15 +1,21 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { CardComponent } from "../components";
 import bridge from "../assets/bridge.webp";
 import tower from "../assets/tower.jpeg";
 import icon from "../assets/weather/64x64/day/116.png";
 import { MapPin } from "lucide-react";
+import MiniCard from "../components/MiniCard";
+import Forecast from "../components/Forecast";
+import AnimateReveal from "../components/AnimateReveal";
+import GET_API from "../utils/weatherApi";
+import { useWeatherContext } from "../utils/weatherContext";
 
 const LeftSide = (props) => {
+  //console.log('leftSide',props)
   return (
     <div className=" flex  w-full  bg-green-200 rounded-r-[20px] overflow-hidden relative items-center justify-center">
       <img
-        src={tower}
+        src={bridge}
         alt="img"
         className=" object-cover w-full h-full overflow-hidden relative "
       />
@@ -23,62 +29,50 @@ const LeftSide = (props) => {
           </div>
         </div>
       </div>
-      <h1 className=" absolute z-40 font-bold text-[12rem] ] text-slate-50 drop-shadow-lg">
-        11:11
+      <h1 className=" font-orbitron font-bold absolute z-40 text-[5rem] text-slate-50 drop-shadow-lg">
+        12:50PM
       </h1>
     </div>
   );
 };
 
-const MiniCard = (props) => {
+const RightSide = (props) => {
+  //console.log('rightSide',props)
   return (
-    <div className=" divide-slate-400/25 p-4 justify-center flex w-[140px] h-[140px] shadow-xl bg-slate-50 drop-shadow-2xl rounded-xl">
-      {/**first part */}
-      <div className="text-[0.75rem]  gap-4 flex flex-col text-slate-700 m-auto -ml-1">
-        <h1 className="font-bold text-2xl text-slate-800">50 &deg;</h1>
-
-        <div>
-          <h3 className="font-semibold  items-center  flex">
-            Sunny{" "}
-            <img
-              src={icon}
-              width={34}
-              height={34}
-              alt="icon"
-              className=" inline-flex"
-            />
-          </h3>
-          <h3 className=" font-semibold">Tue 28, July '23</h3>
-        </div>
+    <div className="  w-1/2 h-full font-orbitron   p-6 flex flex-col justify-between">
+      <h1 className=" font-bold text-3xl text-slate-800">Today</h1>
+      <CardComponent props={props}/>
+      <h1 className=" font-bold text-1xl text-slate-800">Daily</h1>
+      <div className="flex gap-2">
+        <MiniCard props={icon} />
+        <MiniCard props={icon} />
       </div>
     </div>
   );
 };
+//
+const Hero = ({props}) => {
+  //console.log(props)
 
-const RightSide = (props) => {
   return (
-    <div className="  w-1/2 h-full p-6 flex flex-col justify-between">
-      <h1 className=" font-bold text-3xl text-slate-800">Today</h1>
-      <CardComponent />
-
-      <h1 className=" font-bold text-1xl text-slate-800">Daily</h1>
-
-      <div className="flex gap-2">
-        <MiniCard />
-        <MiniCard />
+    <section className="w-full h-screen  flex flex-col gap-8  items-center justify-center container ">
+      <div className="w-2/3 h-[490px] shadow-2xl rounded-xl  shadow-slate-900/90  justify-center flex flex-col items-center ">
+        <div className="flex w-full h-full bg-white/70 backdrop-blur-lg rounded-xl overflow-hidden">
+          <LeftSide props={props}/>
+          <RightSide  props={props}/>
+        </div>
       </div>
-    </div>
+    </section>
   );
 };
 
 const HomeComponent = () => {
+  const {weather} = useWeatherContext()
   return (
-    <main className=" h-[490px]  shadow-2xl rounded-xl  shadow-slate-900/90 w-2/3 mt-4 justify-center flex flex-row items-center container ">
-      <div className="flex w-full h-full bg-slate-50  rounded-xl overflow-hidden">
-        <LeftSide />
-        <RightSide />
-      </div>
-    </main>
+    <div className="flex flex-col mx-auto gap-2 items-center  backdrop-blur-lg min-h-screen px-4 py-3">
+      <Hero props={weather}/>
+      <Forecast />
+    </div>
   );
 };
 
